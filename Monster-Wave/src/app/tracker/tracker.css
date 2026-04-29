@@ -1,0 +1,8 @@
+:host {
+    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+}
+
+h1 {
+	font-size: clamp(1.8rem, 3vw, 2.7rem);
+    color: yellowgreen;
+}
