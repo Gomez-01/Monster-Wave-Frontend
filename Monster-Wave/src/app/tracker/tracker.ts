@@ -7,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CheckboxModule } from 'primeng/checkbox';
 import { CardModule } from 'primeng/card';
+import { TagModule } from 'primeng/tag';
 
 
 
@@ -21,10 +22,10 @@ import { CardModule } from 'primeng/card';
     InputTextModule,
     InputNumberModule,
     CheckboxModule,
-    CardModule
+    CardModule,
+    TagModule
   ],
   templateUrl: './tracker.html',
-  styleUrl: './tracker.css'
 })
 
 export class Tracker {
