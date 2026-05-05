@@ -8,8 +8,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { CheckboxModule } from 'primeng/checkbox';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
-
-
+import { IftaLabelModule } from 'primeng/iftalabel';
 
 @Component({
   selector: 'app-tracker',
@@ -23,7 +22,8 @@ import { TagModule } from 'primeng/tag';
     InputNumberModule,
     CheckboxModule,
     CardModule,
-    TagModule
+    TagModule,
+    IftaLabelModule
   ],
   templateUrl: './tracker.html',
 })
