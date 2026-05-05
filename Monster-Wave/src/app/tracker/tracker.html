@@ -1,95 +1,93 @@
-<!-- 
-    Notas:
-    O preco esta em Reais(R$) pela proposta do site ser sobre energeticos disponiveis no Brasil
-    Ja o resto esta em ingçes pelo objetivo de fazer o projeto majoritariamente em ingles.
--->
-<main>
-    <section>
-        <h1>Monster Energy Drink Test Place</h1>
-    </section>
+<!-- Monster Energy Drink Catalog -->
+<div class="max-w-7xl mx-auto p-6 bg-gray-50 min-h-screen">
+  <header class="mb-8">
+    <h1 class="text-4xl font-extrabold text-gray-900">Monster Energy Drink Catalog</h1>
+  </header>
 
-<section [ngStyle]="{ display: 'flex', gap: '1rem', alignItems: 'flex-start', flexWrap: 'wrap' }">
-    <p-card [ngStyle]="{ flex: '1 1 360px', marginBottom: '1rem' }">
-            <ng-template pTemplate="title">
-                {{ editingId !== null ? 'Edit drink' : 'Add new drink' }}
-            </ng-template>
+  <div class="flex flex-col lg:flex-row gap-8">
+    
+    <!-- Lado Esquerdo: Formulário com p-card -->
+    <div class="w-full lg:w-1/3">
+      <p-card [header]="editingId !== null ? 'Edit drink' : 'Add new drink'">
+        <form (ngSubmit)="save()" class="space-y-6">
+          <div class="flex flex-col gap-4">
+            <p-iftalabel>
+              <input pInputText id="name" [(ngModel)]="formModel.name" name="name" class="w-full" required/>
+              <label for="name">Name</label>
+            </p-iftalabel>
 
-            <form (ngSubmit)="save()" class="p-fluid">
-                <div style="display:flex;gap:.5rem;margin-top:.5rem">
-                    <label for="name">Name</label>
+            <p-iftalabel>
+              <input pInputText id="flavor" [(ngModel)]="formModel.flavor" name="flavor" class="w-full" required/>
+              <label for="flavor">Flavor</label>
+            </p-iftalabel>
+
+            <p-iftalabel>
+              <p-inputnumber [(ngModel)]="formModel.price" name="price" mode="currency" currency="BRL" locale="pt-BR" styleClass="w-full" />
+              <label for="price">Price</label>
+            </p-iftalabel>
+
+            <p-iftalabel>
+              <p-inputnumber [(ngModel)]="formModel.release" name="release" mode="decimal" [useGrouping]="false" styleClass="w-full" />
+              <label for="release">Release year</label>
+            </p-iftalabel>
+
+            <div class="flex items-center gap-2 px-1">
+              <input type="checkbox" [(ngModel)]="formModel.sugarFree" name="sugarFree" id="sugarFree" class="h-4 w-4 text-blue-600" />
+              <label for="sugarFree" class="text-sm text-gray-700">Sugar free</label>
+            </div>
+          </div>
+
+          <div class="flex gap-2 pt-4 border-t border-gray-100">
+            <button pButton type="submit" 
+                    [label]="editingId !== null ? 'Update' : 'Create'"
+                    class="p-button-primary px-4 py-2">
+            </button>
+            <button pButton *ngIf="editingId !== null" type="button" 
+                    (click)="cancel()" label="Cancel"
+                    class="p-button-secondary p-button-outlined px-4 py-2">
+            </button>
+          </div>
+        </form>
+      </p-card>
+    </div>
+
+    <!-- Lado Direito: Tabela com p-card -->
+    <div class="flex-1">
+      <p-card header="Current Catalog">
+        <p-table [value]="drinks" [rowHover]="true" responsiveLayout="scroll" styleClass="p-datatable-sm">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="text-gray-600">Name</th>
+              <th class="text-gray-600">Flavor</th>
+              <th class="text-gray-600">Price</th>
+              <th class="text-gray-600">Release</th>
+              <th class="text-gray-600">Sugar-free</th>
+              <th class="text-gray-600">Actions</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-drink>
+            <tr>
+              <td>{{drink.name}}</td>
+              <td>{{drink.flavor}}</td>
+              <td>R$ {{drink.price.toFixed(2)}}</td>
+              <td>{{drink.release}}</td>
+              <td>
+                <span [class]="drink.sugarFree ? 'text-green-600 font-medium' : 'text-gray-500'">
+                  {{drink.sugarFree ? 'Yes' : 'No'}}
+                </span>
+              </td>
+              <td>
+                <div class="flex gap-3">
+                  <button (click)="edit(drink)" class="text-blue-600 hover:underline font-medium">Edit</button>
+                  <button (click)="delete(drink.id)" class="text-red-600 hover:underline font-medium">Delete</button>
                 </div>
-                <div>
-                    <input id="name" pInputText name="name" [(ngModel)]="formModel.name" placeholder="Ex: Ultra White"
-                        required />
-                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
 
-                <div style="display:flex;gap:.5rem;margin-top:.5rem">
-                    <label for="flavor">Flavor</label>
-                </div>
-                <div>
-                    <input id="flavor" pInputText name="flavor" [(ngModel)]="formModel.flavor"
-                        placeholder="Ex: Orange Citrus" required />
-                </div>
-
-                <div style="display:flex;gap:.5rem;margin-top:.5rem">
-                    <label for="price">Price(R$)</label>
-                </div>
-                <div>
-                    <p-inputNumber inputId="price" name="price" [(ngModel)]="formModel.price" [mode]="'decimal'"
-                        [min]="0" [step]="0.1"></p-inputNumber>
-                </div>
-
-
-                <div style="display:flex;gap:.5rem;margin-top:.5rem">
-                    <label for="release">Release year</label>
-                </div>
-                <div>
-                    <input id="release" pInputText type="number" name="release"
-                        [(ngModel)]="formModel.release" />
-                </div>
-
-                <div style="display:flex;gap:.5rem;margin-top:.5rem">
-                    <p-checkbox name="sugarFree" [(ngModel)]="formModel.sugarFree" binary="true"></p-checkbox>
-                    <label for="sugarFree">Sugar free</label>
-                </div>
-
-                <div style="display:flex;gap:.5rem;margin-top:.5rem">
-                    <button pButton type="submit" label="{{ editingId !== null ? 'Update drink' : 'Create drink' }}"></button>
-                    <button *ngIf="editingId !== null" pButton type="button" class="p-button-secondary" label="Cancel"
-                        (click)="cancel()"></button>
-                </div>
-            </form>
-        </p-card>
-
-        <p-card [ngStyle]="{ flex: '2 1 120vh' }">
-            <ng-template pTemplate="title">Current catalog</ng-template>
-
-            <p-table [value]="drinks">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>Name</th>
-                        <th>Flavor</th>
-                        <th>Price</th>
-                        <th>Release</th>
-                        <th>SugarFree</th>
-                        <th>Actions</th>
-                    </tr>
-                </ng-template>
-
-                <ng-template pTemplate="body" let-drink>
-                    <tr>
-                        <td>{{drink.name}}</td>
-                        <td>{{drink.flavor}}</td>
-                        <td>{{drink.price.toFixed(2)}} </td>
-                        <td>{{drink.release}}</td>
-                        <td>{{drink.sugarFree ? 'Yes' : 'No'}}</td>
-                        <td>
-                            <p-button icon="pi pi-pencil" severity="secondary" (click)="edit(drink)" />
-                            <p-button icon="pi pi-trash" severity="danger" (click)="delete(drink.id)" />
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </p-card>
-    </section>
-</main>
+  </div>
+</div>
