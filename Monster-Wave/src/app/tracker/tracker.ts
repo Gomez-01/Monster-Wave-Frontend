@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { form, FormField, required, min } from '@angular/forms/signals';
 import { FormsModule } from '@angular/forms';
-import { form, required, min } from '@angular/forms/signals';
 
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -19,6 +19,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
   imports: [
     CommonModule,
     FormsModule,
+    FormField,
     ButtonModule,
     TableModule,
     InputTextModule,
@@ -32,7 +33,6 @@ import { MessageService, ConfirmationService } from 'primeng/api';
   providers: [ConfirmationService, MessageService]
 })
 export class Tracker {
-  private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
 
   readonly currentYear = new Date().getFullYear();
@@ -107,6 +107,10 @@ export class Tracker {
 
   setReleaseYear(value: number | null) {
     this.monsterForm.release().value.set(value ?? this.currentYear);
+  }
+
+  setPrice(value: number | null) {
+    this.monsterForm.price().value.set(value ?? 0);
   }
 
   isFieldInvalid(field: { invalid(): boolean; dirty(): boolean; touched(): boolean }): boolean {

@@ -7,18 +7,14 @@
       <input
         pInputText
         id="name"
-        name="name"
         class="w-full"
         [class.p-invalid]="isFieldInvalid(monsterForm.name())"
-        [ngModel]="monsterForm.name().value()"
-        (ngModelChange)="monsterForm.name().value.set($event)"
-        (blur)="markFieldTouched(monsterForm.name())"
-        [ngModelOptions]="{ standalone: true }"
+        [formField]="monsterForm.name"
         placeholder="Monster Energy Original Green"
       />
-      <small *ngIf="isFieldInvalid(monsterForm.name())" class="text-sm text-red-400">
-        {{ fieldErrorMessage(monsterForm.name()) }}
-      </small>
+        <small *ngIf="isFieldInvalid(monsterForm.name())" class="text-sm text-red-400">
+          {{ fieldErrorMessage(monsterForm.name()) }}
+        </small>
     </div>
 
     <div class="space-y-2">
@@ -26,13 +22,9 @@
       <input
         pInputText
         id="flavor"
-        name="flavor"
         class="w-full"
         [class.p-invalid]="isFieldInvalid(monsterForm.flavor())"
-        [ngModel]="monsterForm.flavor().value()"
-        (ngModelChange)="monsterForm.flavor().value.set($event)"
-        (blur)="markFieldTouched(monsterForm.flavor())"
-        [ngModelOptions]="{ standalone: true }"
+        [formField]="monsterForm.flavor"
         placeholder="Classic Citrus"
       />
       <small *ngIf="isFieldInvalid(monsterForm.flavor())" class="text-sm text-red-400">
@@ -40,20 +32,20 @@
       </small>
     </div>
 
+
     <div class="space-y-2">
       <label for="price" class="text-sm font-medium text-slate-700">Price</label>
       <p-inputnumber
         inputId="price"
-        name="price"
         mode="currency"
         currency="BRL"
         locale="pt-BR"
         styleClass="w-full"
         [invalid]="isFieldInvalid(monsterForm.price())"
         [ngModel]="monsterForm.price().value()"
-        (ngModelChange)="monsterForm.price().value.set($event ?? 0)"
-        (onBlur)="markFieldTouched(monsterForm.price())"
         [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="setPrice($event)"
+        (onBlur)="markFieldTouched(monsterForm.price())"
         class="text-emerald-600"
       />
       <small *ngIf="isFieldInvalid(monsterForm.price())" class="text-sm text-red-400">
@@ -65,15 +57,14 @@
       <label for="release" class="text-sm font-medium text-slate-700">Release year</label>
       <p-inputnumber
         inputId="release"
-        name="release"
         mode="decimal"
         [useGrouping]="false"
         styleClass="w-full"
         [invalid]="isFieldInvalid(monsterForm.release())"
         [ngModel]="monsterForm.release().value()"
-        (ngModelChange)="monsterForm.release().value.set($event ?? currentYear)"
-        (onBlur)="markFieldTouched(monsterForm.release())"
         [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="setReleaseYear($event)"
+        (onBlur)="markFieldTouched(monsterForm.release())"
       />
       <small *ngIf="isFieldInvalid(monsterForm.release())" class="text-sm text-red-400">
         {{ fieldErrorMessage(monsterForm.release()) }}
@@ -84,13 +75,9 @@
       <input
         type="checkbox"
         id="sugarFree"
-        name="sugarFree"
         class="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-600"
         [class.p-invalid]="isFieldInvalid(monsterForm.sugarFree())"
-        [ngModel]="monsterForm.sugarFree().value()"
-        (ngModelChange)="monsterForm.sugarFree().value.set($event)"
-        (blur)="markFieldTouched(monsterForm.sugarFree())"
-        [ngModelOptions]="{ standalone: true }"
+        [formField]="monsterForm.sugarFree"
       />
       <label for="sugarFree" class="text-sm font-medium text-slate-700">Sugar free</label>
     </div>
@@ -111,7 +98,7 @@
             <ng-container *ngTemplateOutlet="formFields"></ng-container>
 
             <div class="flex flex-wrap gap-3 pt-2">
-              <button
+              <button 
                 pButton
                 type="submit"
                 [label]="editingId() !== null ? 'Update' : 'Create'"
@@ -172,55 +159,3 @@
     </div>
   </div>
 </div>
-
-  <form class="space-y-4" (ngSubmit)="update()">
-    <div class="space-y-2">
-      <label for="editName" class="text-sm font-medium text-slate-700">Name</label>
-      <input
-        pInputText
-        id="editName"
-        name="editName"
-        class="w-full"
-        [class.p-invalid]="isFieldInvalid(monsterForm.name())"
-        [ngModel]="monsterForm.name().value()"
-        (ngModelChange)="monsterForm.name().value.set($event)"
-        (blur)="markFieldTouched(monsterForm.name())"
-        [ngModelOptions]="{ standalone: true }"
-      />
-      <small *ngIf="isFieldInvalid(monsterForm.name())" class="text-sm text-red-400">
-        {{ fieldErrorMessage(monsterForm.name()) }}
-      </small>
-    </div>
-
-    <div class="space-y-2">
-      <label for="editFlavor" class="text-sm font-medium text-slate-700">Flavor</label>
-      <input
-        pInputText
-        id="editFlavor"
-        name="editFlavor"
-        class="w-full"
-        [class.p-invalid]="isFieldInvalid(monsterForm.flavor())"
-        [ngModel]="monsterForm.flavor().value()"
-        (ngModelChange)="monsterForm.flavor().value.set($event)"
-        (blur)="markFieldTouched(monsterForm.flavor())"
-        [ngModelOptions]="{ standalone: true }"
-      />
-      <small *ngIf="isFieldInvalid(monsterForm.flavor())" class="text-sm text-red-400">
-        {{ fieldErrorMessage(monsterForm.flavor()) }}
-      </small>
-    </div>
-
-    <div class="space-y-2">
-      <label for="editPrice" class="text-sm font-medium text-slate-700">Price</label>
-      <input
-        pInputText
-        id="editPrice"
-        name="editPrice"
-        class="w-full"
-        [class.p-invalid]="isFieldInvalid(monsterForm.price())"
-        [ngModel]="monsterForm.price().value()"
-        (ngModelChange)="monsterForm.price().value.set($event)"
-        (blur)="markFieldTouched(monsterForm.price())"
-        [ngModelOptions]="{ standalone: true }"
-      />
-      <small *ngIf="isFieldInvalid(monsterForm.price())" class="text-sm text-red-400">
