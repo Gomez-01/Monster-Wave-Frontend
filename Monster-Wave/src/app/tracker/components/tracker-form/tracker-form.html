@@ -1,0 +1,110 @@
+<div class="space-y-4">
+  <div class="space-y-2">
+    <label for="name" class="text-sm font-medium text-slate-700">Name</label>
+    <input
+      pInputText
+      id="name"
+      class="w-full"
+      [class.p-invalid]="isFieldInvalid(monsterForm.name())"
+      [formField]="monsterForm.name"
+      placeholder="Monster Energy Original Green"
+    />
+    @if (isFieldInvalid(monsterForm.name())) {
+      <small class="text-sm text-red-400">
+        {{ fieldErrorMessage(monsterForm.name()) }}
+      </small>
+    }
+  </div>
+
+  <div class="space-y-2">
+    <label for="flavor" class="text-sm font-medium text-slate-700">Flavor</label>
+    <input
+      pInputText
+      id="flavor"
+      class="w-full"
+      [class.p-invalid]="isFieldInvalid(monsterForm.flavor())"
+      [formField]="monsterForm.flavor"
+      placeholder="Classic Citrus"
+    />
+    @if (isFieldInvalid(monsterForm.flavor())) {
+      <small class="text-sm text-red-400">
+        {{ fieldErrorMessage(monsterForm.flavor()) }}
+      </small>
+    }
+  </div>
+
+  <div class="space-y-2">
+    <label for="price" class="text-sm font-medium text-slate-700">Price</label>
+    <p-inputnumber
+      inputId="price"
+      mode="currency"
+      currency="BRL"
+      locale="pt-BR"
+      styleClass="w-full"
+      [invalid]="isFieldInvalid(monsterForm.price())"
+      [ngModel]="monsterForm.price().value()"
+      [ngModelOptions]="{ standalone: true }"
+      (ngModelChange)="setPrice($event)"
+      (onBlur)="markFieldTouched(monsterForm.price())"
+      class="text-emerald-600"
+    />
+    @if (isFieldInvalid(monsterForm.price())) {
+      <small class="text-sm text-red-400">
+        {{ fieldErrorMessage(monsterForm.price()) }}
+      </small>
+    }
+  </div>
+
+  <div class="space-y-2">
+    <label for="release" class="text-sm font-medium text-slate-700">Release year</label>
+    <p-inputnumber
+      inputId="release"
+      mode="decimal"
+      [useGrouping]="false"
+      styleClass="w-full"
+      [invalid]="isFieldInvalid(monsterForm.release())"
+      [ngModel]="monsterForm.release().value()"
+      [ngModelOptions]="{ standalone: true }"
+      (ngModelChange)="setReleaseYear($event)"
+      (onBlur)="markFieldTouched(monsterForm.release())"
+    />
+    @if (isFieldInvalid(monsterForm.release())) {
+      <small class="text-sm text-red-400">
+        {{ fieldErrorMessage(monsterForm.release()) }}
+      </small>
+    }
+  </div>
+
+  <div class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+    <input
+      type="checkbox"
+      id="sugarFree"
+      class="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-600"
+      [class.p-invalid]="isFieldInvalid(monsterForm.sugarFree())"
+      [formField]="monsterForm.sugarFree"
+    />
+    <label for="sugarFree" class="text-sm font-medium text-slate-700">Sugar free</label>
+  </div>
+
+  <div class="flex flex-wrap gap-3 pt-2">
+    <button
+      pButton
+      type="submit"
+      [label]="submitLabel()"
+      [disabled]="!monsterForm().valid()"
+      class="p-button-success"
+      (click)="save()"
+    ></button>
+
+    @if (showCancel()) {
+      <button
+        pButton
+        type="button"
+        [label]="cancelLabel()"
+        severity="secondary"
+        outlined="true"
+        (click)="cancel()"
+      ></button>
+    }
+  </div>
+</div>

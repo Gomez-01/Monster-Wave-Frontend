@@ -1,0 +1,53 @@
+<p-dialog
+  header="Drink details"
+  [visible]="visible()"
+  (visibleChange)="visible.set($event)"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '42rem' }"
+>
+  @if (drink(); as currentDrink) {
+    <div class="rounded-2xl space-y-4">
+      <div class="rounded-2xl space-y-4">
+        <p-card header="Name" class="text-xs uppercase tracking-[0.2em]">
+          <p class="m-0 text-lg font-semibold">{{ currentDrink.name }}</p>
+        </p-card>
+      </div>
+
+      <div class="grid gap-3 sm:grid-cols-2">
+        <div class="rounded-2xl p-4">
+          <p-card header="Flavor" class="text-xs uppercase tracking-[0.3em]">
+            <p class="m-0 text-base font-medium">{{ currentDrink.flavor }}</p>
+          </p-card>
+        </div>
+
+        <div class="rounded-2xl p-4">
+          <p-card header="Price" class="text-xs uppercase tracking-[0.3em]">
+            <p class="m-0 text-base font-medium">R$ {{ currentDrink.price | number:'1.2-2' }}</p>
+          </p-card>
+        </div>
+
+        <div class="rounded-2xl p-4">
+          <p-card header="Release" class="text-xs uppercase tracking-[0.3em]">
+            <p class="m-0 text-base font-medium">{{ currentDrink.release }}</p>
+          </p-card>
+        </div>
+
+        <div class="rounded-2xl p-4">
+          <p-card header="Sugar-free" class="text-xs uppercase tracking-[0.3em]">
+            <p class="m-0 text-base font-medium">
+              {{ currentDrink.sugarFree ? 'Yes' : 'No' }}
+            </p>
+          </p-card>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <p class="text-sm text-slate-500">Selecione uma bebida para ver os detalhes.</p>
+  }
+
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Close" severity="secondary" outlined="true" (click)="close()"></button>
+  </ng-template>
+</p-dialog>
