@@ -6,20 +6,20 @@ import { TrackerService } from '../../tracker.service';
 import { TrackerForm } from '../tracker-form/tracker-form.component';
 
 @Component({
-  selector: 'app-tracker-edit',
+  selector: 'app-tracker-create',
   standalone: true,
   imports: [CommonModule, CardModule, TrackerForm],
-  templateUrl: './tracker-edit.html'
+  templateUrl: './tracker-create.html'
 })
-export class TrackerEdit {
+export class TrackerCreate {
   readonly tracker = inject(TrackerService);
-  readonly drink = this.tracker.editDrink;
+  readonly drink = this.tracker.createDrink;
 
   readonly saved = output<string>();
 
   save(): void {
-    this.tracker.atualizar();
-    this.saved.emit('Bebida editada com sucesso');
+    this.tracker.inserir();
+    this.saved.emit('Bebida adicionada com sucesso');
   }
 
   cancel(): void {

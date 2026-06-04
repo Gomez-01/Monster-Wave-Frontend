@@ -1,3 +1,10 @@
 <p-card header="Edit drink" styleClass="h-full">
-  <app-tracker-form [(drink)]="drink" submitLabel="Update" cancelLabel="Cancel" [showCancel]="true" (submitted)="onSubmitted()" (cancelled)="onCancelled()"></app-tracker-form>
+  <app-tracker-form
+    [(drink)]="drink"
+    submitLabel="Update"
+    cancelLabel="Cancel"
+    [showCancel]="true"
+    (submitted)="save()"
+    (cancelled)="cancel()">
+  </app-tracker-form>
 </p-card>

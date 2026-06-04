@@ -1,23 +1,20 @@
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, input, model } from '@angular/core';
-
 import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-
-import { MonsterDrink } from '../../tracker.model';
 import { CardModule } from 'primeng/card';
+
+import { TrackerService } from '../../tracker.service';
 
 @Component({
   selector: 'app-tracker-detail',
   standalone: true,
-  imports: [CommonModule, DialogModule, ButtonModule, CardModule],
+  imports: [CommonModule, CardModule, ButtonModule], 
   templateUrl: './tracker-detail.html'
 })
 export class TrackerDetail {
-  readonly drink = input<MonsterDrink | null>(null);
-  readonly visible = model(false);
+  readonly tracker = inject(TrackerService);
 
-  close() {
-    this.visible.set(false);
+  back(): void {
+    this.tracker.voltar();
   }
 }

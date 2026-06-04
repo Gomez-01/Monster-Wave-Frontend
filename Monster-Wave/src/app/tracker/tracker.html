@@ -2,37 +2,26 @@
 
 <div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950 px-4 py-8 text-slate-100 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-7xl space-y-8">
+
     <header class="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl shadow-emerald-950/30 backdrop-blur">
       <p class="text-sm uppercase tracking-[0.35em] text-emerald-300">Monster Wave</p>
       <h1 class="mt-2 text-4xl font-black tracking-tight text-white sm:text-5xl">Monster Energy Drink Catalog</h1>
     </header>
 
-    <div class="grid gap-8 lg:grid-cols-[380px_minmax(0,1fr)]">
-      <div>
-        @if (editingId() === null) {
-          <app-tracker-create
-            [(drink)]="createDrink"
-            (submitted)="save()"
-          />
-        } @else {
-          <app-tracker-edit
-            [(drink)]="editDrink"
-            (submitted)="update()"
-            (cancelled)="cancelEdit()"
-          />
-        }
-      </div>
+    @switch (tracker.viewMode()) {
+      @case ('listar') {
+        <div class="grid gap-8 lg:grid-cols-[380px_minmax(0,1fr)]">
+          <app-tracker-create (saved)="onMessage($event)" />
+          <app-tracker-list (deleted)="onMessage($event)" />
+        </div>
+      }
+      @case ('alterar') {
+        <app-tracker-edit (saved)="onMessage($event)" />
+      }
+      @case ('detalhar') {
+        <app-tracker-detail />
+      }
+    }
 
-      <div class="space-y-4">
-        <app-tracker-list
-          [drinks]="drinks()"
-          (detail)="showDetailDialog($event)"
-          (edit)="showUpdateDialog($event)"
-          (delete)="delete($event)"
-        />
-      </div>
-    </div>
   </div>
-
-  <app-tracker-detail [(visible)]="detailVisible" [drink]="selectedDrink()" />
 </div>

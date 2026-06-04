@@ -1,29 +1,17 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 
 import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
 
-import { TrackerCreate } from './components/tracker-create/tracker-create';
-import { TrackerDetail } from './components/tracker-detail/tracker-detail.component';
-import { TrackerEdit } from './components/tracker-edit/tracker-edit.component';
-import { TrackerList } from './tracker-list/tracker-list';
 import { MonsterDrink, MonsterFormModel, createEmptyDrink } from './tracker.model';
 
-@Component({
-  selector: 'app-tracker',
-  standalone: true,
-  imports: [CommonModule, ToastModule, TrackerCreate, TrackerDetail, TrackerEdit, TrackerList],
-  templateUrl: './tracker.html',
-  providers: [MessageService]
-})
-export class Tracker {
-  private messageService = inject(MessageService);
+@Injectable()
+export class TrackerService {
+  private readonly messageService = inject(MessageService);
 
   readonly currentYear = new Date().getFullYear();
   private nextId = 6;
 
-  drinks = signal<MonsterDrink[]>([
+  readonly drinks = signal<MonsterDrink[]>([
     { id: 1, name: 'Monster Energy Original Green', flavor: 'Classic Citrus', sugarFree: false, price: 10.49, release: 2002 },
     { id: 2, name: 'Monster Energy Zero Sugar', flavor: 'Classic Citrus', sugarFree: true, price: 11.49, release: 2023 },
     { id: 3, name: 'Monster Dragon Ice Tea', flavor: 'Lemon Tea', sugarFree: false, price: 11.49, release: 2019 },
@@ -31,14 +19,14 @@ export class Tracker {
     { id: 5, name: 'Juice Monster Rio Punch', flavor: 'Papaya Cream', sugarFree: false, price: 11.49, release: 2024 }
   ]);
 
-  editingId = signal<number | null>(null);
-  selectedDrink = signal<MonsterDrink | null>(null);
-  detailVisible = signal(false);
+  readonly editingId = signal<number | null>(null);
+  readonly selectedDrink = signal<MonsterDrink | null>(null);
+  readonly detailVisible = signal(false);
 
-  createDrink = signal<MonsterFormModel>(createEmptyDrink(this.currentYear));
-  editDrink = signal<MonsterFormModel>(createEmptyDrink(this.currentYear));
+  readonly createDrink = signal<MonsterFormModel>(createEmptyDrink(this.currentYear));
+  readonly editDrink = signal<MonsterFormModel>(createEmptyDrink(this.currentYear));
 
-  save() {
+  save(): void {
     const newDrink: MonsterDrink = {
       id: this.nextId++,
       ...this.createDrink()
@@ -49,7 +37,7 @@ export class Tracker {
     this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Bebida adicionada com sucesso' });
   }
 
-  update() {
+  update(): void {
     const editingId = this.editingId();
 
     if (editingId === null) {
@@ -68,8 +56,8 @@ export class Tracker {
     this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Bebida editada com sucesso' });
   }
 
-  delete(id: number) {
-    this.drinks.update(current => current.filter(d => d.id !== id));
+  delete(id: number): void {
+    this.drinks.update(current => current.filter(drink => drink.id !== id));
 
     if (this.selectedDrink()?.id === id) {
       this.selectedDrink.set(null);
@@ -83,22 +71,22 @@ export class Tracker {
     this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Bebida excluída com sucesso' });
   }
 
-  showUpdateDialog(drink: MonsterDrink) {
+  showUpdateDialog(drink: MonsterDrink): void {
     this.editingId.set(drink.id);
     this.editDrink.set({ ...drink });
   }
 
-  showDetailDialog(drink: MonsterDrink) {
+  showDetailDialog(drink: MonsterDrink): void {
     this.selectedDrink.set(drink);
     this.detailVisible.set(true);
   }
 
-  cancelEdit() {
+  cancelEdit(): void {
     this.editingId.set(null);
     this.editDrink.set(createEmptyDrink(this.currentYear));
   }
 
-  closeDetail() {
+  closeDetail(): void {
     this.detailVisible.set(false);
     this.selectedDrink.set(null);
   }
