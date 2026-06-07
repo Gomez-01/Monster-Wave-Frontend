@@ -6,8 +6,8 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 
-import { MonsterDrink } from '../tracker.model';
-import { TrackerService } from '../tracker.service';
+import { MonsterDrink } from '../../../models/tracker.model';
+import { TrackerService } from '../../../services/tracker.service';
 
 @Component({
   selector: 'app-tracker-list',
@@ -25,7 +25,7 @@ export class TrackerList {
 
   showDetail(drink: MonsterDrink): void {
     this.tracker.detalhar(drink);
-    this.router.navigate(['../detalhe'], {
+    this.router.navigate(['../detail'], {
       relativeTo: this.route,
       state: { drink }
     });
@@ -33,7 +33,7 @@ export class TrackerList {
 
   showEdit(drink: MonsterDrink): void {
     this.tracker.abrirAlterar(drink);
-    this.router.navigate(['../atualizar'], {
+    this.router.navigate(['../update'], {
       relativeTo: this.route,
       state: { drink }
     });
@@ -41,7 +41,7 @@ export class TrackerList {
 
   openCreate(): void {
     this.tracker.abrirIncluir();
-    this.router.navigate(['../novo'], {
+    this.router.navigate(['../new_drink'], {
       relativeTo: this.route
     });
   }

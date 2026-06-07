@@ -8,7 +8,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 
-import { MonsterFormModel, createEmptyDrink } from '../../tracker.model';
+import { MonsterFormModel, createEmptyDrink } from '../../../models/tracker.model';
 
 @Component({
   selector: 'app-tracker-form',

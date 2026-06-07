@@ -4,9 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
 
-import { TrackerService } from '../../tracker.service';
+import { TrackerService } from '../../../services/tracker.service';
 import { TrackerForm } from '../tracker-form/tracker-form.component';
-import { MonsterDrink } from '../../tracker.model';
+import { MonsterDrink } from '../../../models/tracker.model';
 
 @Component({
   selector: 'app-tracker-edit',
@@ -31,12 +31,12 @@ export class TrackerEdit {
   save(): void {
     this.tracker.atualizar();
     this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Bebida editada com sucesso' });
-    this.router.navigate(['../lista'], { relativeTo: this.route });
+    this.router.navigate(['../list'], { relativeTo: this.route });
   }
 
   cancel(): void {
     this.tracker.voltar();
-    this.router.navigate(['../lista'], { relativeTo: this.route });
+    this.router.navigate(['../list'], { relativeTo: this.route });
   }
 
   private readDrinkFromState(): MonsterDrink | null {

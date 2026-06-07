@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 
-import { TrackerService } from '../../tracker.service';
-import { MonsterDrink } from '../../tracker.model';
+import { TrackerService } from '../../../services/tracker.service';
+import { MonsterDrink } from '../../../models/tracker.model';
 
 @Component({
   selector: 'app-tracker-detail',
@@ -27,7 +27,7 @@ export class TrackerDetail {
 
   back(): void {
     this.tracker.voltar();
-    this.router.navigate(['../lista'], { relativeTo: this.route });
+    this.router.navigate(['../list'], { relativeTo: this.route });
   }
 
   private readDrinkFromState(): MonsterDrink | null {

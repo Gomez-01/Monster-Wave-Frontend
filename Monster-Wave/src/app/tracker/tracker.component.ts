@@ -4,7 +4,7 @@ import { RouterOutlet } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 
-import { TrackerService } from './tracker.service';
+import { TrackerService } from '../services/tracker.service';
 
 @Component({
   selector: 'app-tracker',

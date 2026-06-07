@@ -1,5 +1,5 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { MonsterDrink, MonsterFormModel, createEmptyDrink } from './tracker.model';
+import { MonsterDrink, MonsterFormModel, createEmptyDrink } from '../models/tracker.model';
 
 @Injectable()
 export class TrackerService {
