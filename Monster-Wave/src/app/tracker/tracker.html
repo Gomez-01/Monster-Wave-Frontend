@@ -8,20 +8,7 @@
       <h1 class="mt-2 text-4xl font-black tracking-tight text-white sm:text-5xl">Monster Energy Drink Catalog</h1>
     </header>
 
-    @switch (tracker.viewMode()) {
-      @case ('listar') {
-        <div class="grid gap-8 lg:grid-cols-[380px_minmax(0,1fr)]">
-          <app-tracker-create (saved)="onMessage($event)" />
-          <app-tracker-list (deleted)="onMessage($event)" />
-        </div>
-      }
-      @case ('alterar') {
-        <app-tracker-edit (saved)="onMessage($event)" />
-      }
-      @case ('detalhar') {
-        <app-tracker-detail />
-      }
-    }
+    <router-outlet />
 
   </div>
 </div>

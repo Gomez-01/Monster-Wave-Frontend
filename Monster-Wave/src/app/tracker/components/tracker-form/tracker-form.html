@@ -95,16 +95,14 @@
       class="p-button-success"
       (click)="save()"
     ></button>
-
-    @if (showCancel()) {
-      <button
-        pButton
-        type="button"
-        [label]="cancelLabel()"
-        severity="secondary"
-        outlined="true"
-        (click)="cancel()"
-      ></button>
-    }
+    
+    <button
+      pButton
+      type="button"
+      [label]="cancelLabel()"
+      severity="secondary"
+      outlined="true"
+      (click)="cancel()"
+    ></button>
   </div>
 </div>

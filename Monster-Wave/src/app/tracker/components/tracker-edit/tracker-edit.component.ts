@@ -1,9 +1,12 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
 
 import { TrackerService } from '../../tracker.service';
 import { TrackerForm } from '../tracker-form/tracker-form.component';
+import { MonsterDrink } from '../../tracker.model';
 
 @Component({
   selector: 'app-tracker-edit',
@@ -13,16 +16,32 @@ import { TrackerForm } from '../tracker-form/tracker-form.component';
 })
 export class TrackerEdit {
   readonly tracker = inject(TrackerService);
+  private readonly messageService = inject(MessageService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   readonly drink = this.tracker.editDrink;
 
-  readonly saved = output<string>();
+  constructor() {
+    const drink = this.readDrinkFromState();
+    if (drink) {
+      this.tracker.abrirAlterar(drink);
+    }
+  }
 
   save(): void {
     this.tracker.atualizar();
-    this.saved.emit('Bebida editada com sucesso');
+    this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Bebida editada com sucesso' });
+    this.router.navigate(['../lista'], { relativeTo: this.route });
   }
 
   cancel(): void {
     this.tracker.voltar();
+    this.router.navigate(['../lista'], { relativeTo: this.route });
+  }
+
+  private readDrinkFromState(): MonsterDrink | null {
+    const state = this.router.getCurrentNavigation()?.extras.state ?? history.state;
+    const drink = state?.['drink'] as MonsterDrink | undefined;
+    return drink ?? null;
   }
 }

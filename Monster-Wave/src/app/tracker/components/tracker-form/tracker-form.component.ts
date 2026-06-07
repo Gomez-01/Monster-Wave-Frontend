@@ -19,7 +19,6 @@ import { MonsterFormModel, createEmptyDrink } from '../../tracker.model';
 export class TrackerForm {
   readonly drink = model<MonsterFormModel>(createEmptyDrink());
   readonly submitLabel = input.required<string>();
-  readonly showCancel = input(true);
   readonly cancelLabel = input('Cancel');
 
   readonly submitted = output<void>();

@@ -1,4 +1,8 @@
 <p-card header="Current Catalog" styleClass="overflow-hidden">
+  <div class="mb-4 flex justify-end">
+    <button pButton type="button" label="Add new drink" severity="success" (click)="openCreate()"></button>
+  </div>
+
   <p-table [value]="drinks()" [rowHover]="true" responsiveLayout="scroll" styleClass="p-datatable-sm">
     <ng-template pTemplate="header">
       <tr>

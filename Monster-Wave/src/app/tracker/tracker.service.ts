@@ -1,8 +1,6 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { MonsterDrink, MonsterFormModel, createEmptyDrink } from './tracker.model';
 
-export type ViewMode = 'listar' | 'incluir' | 'alterar' | 'detalhar';
-
 @Injectable()
 export class TrackerService {
   readonly currentYear = new Date().getFullYear();
@@ -17,9 +15,6 @@ export class TrackerService {
   ]);
 
   private readonly selecionado = signal<MonsterDrink | null>(null);
-  private readonly modoVisualizacao = signal<ViewMode>('listar');
-
-  readonly viewMode   = this.modoVisualizacao.asReadonly();
   readonly selected   = this.selecionado.asReadonly();
   readonly drinks     = this.registros.asReadonly();
 
@@ -54,21 +49,19 @@ export class TrackerService {
 
   detalhar(drink: MonsterDrink): void {
     this.selecionado.set(drink);
-    this.modoVisualizacao.set('detalhar');
   }
 
   abrirIncluir(): void {
-    this.modoVisualizacao.set('incluir');
+    this.createDrink.set(createEmptyDrink(this.currentYear));
   }
 
   abrirAlterar(drink: MonsterDrink): void {
     this.selecionado.set(drink);
     this.editDrink.set({ ...drink });
-    this.modoVisualizacao.set('alterar');
   }
 
   voltar(): void {
     this.selecionado.set(null);
-    this.modoVisualizacao.set('listar');
+    this.editDrink.set(createEmptyDrink(this.currentYear));
   }
 }

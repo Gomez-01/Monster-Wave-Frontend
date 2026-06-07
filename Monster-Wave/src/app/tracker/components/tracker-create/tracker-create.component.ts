@@ -1,5 +1,7 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
 
 import { TrackerService } from '../../tracker.service';
@@ -13,16 +15,19 @@ import { TrackerForm } from '../tracker-form/tracker-form.component';
 })
 export class TrackerCreate {
   readonly tracker = inject(TrackerService);
+  private readonly messageService = inject(MessageService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   readonly drink = this.tracker.createDrink;
-
-  readonly saved = output<string>();
 
   save(): void {
     this.tracker.inserir();
-    this.saved.emit('Bebida adicionada com sucesso');
+    this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Bebida adicionada com sucesso' });
+    this.router.navigate(['../lista'], { relativeTo: this.route });
   }
 
   cancel(): void {
     this.tracker.voltar();
+    this.router.navigate(['../lista'], { relativeTo: this.route });
   }
 }
