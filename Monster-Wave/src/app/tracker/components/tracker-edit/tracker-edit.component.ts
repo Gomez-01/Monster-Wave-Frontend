@@ -7,6 +7,7 @@ import { CardModule } from 'primeng/card';
 import { TrackerService } from '../../../services/tracker.service';
 import { TrackerForm } from '../tracker-form/tracker-form.component';
 import { MonsterDrink } from '../../../models/tracker.model';
+import { TrackerComponent } from '../../tracker.component';
 
 @Component({
   selector: 'app-tracker-edit',
@@ -16,26 +17,30 @@ import { MonsterDrink } from '../../../models/tracker.model';
 })
 export class TrackerEdit {
   readonly tracker = inject(TrackerService);
+  readonly trackerUi = inject(TrackerComponent);
   private readonly messageService = inject(MessageService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  readonly drink = this.tracker.editDrink;
+  readonly drink = this.trackerUi.editDrink;
 
   constructor() {
     const drink = this.readDrinkFromState();
     if (drink) {
-      this.tracker.abrirAlterar(drink);
+      this.trackerUi.abrirAlterar(drink);
     }
   }
 
   save(): void {
-    this.tracker.atualizar();
+    const selected = this.trackerUi.selected();
+    if (!selected) return;
+
+    this.tracker.update(selected.id, this.drink());
     this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Bebida editada com sucesso' });
     this.router.navigate(['../list'], { relativeTo: this.route });
   }
 
   cancel(): void {
-    this.tracker.voltar();
+    this.trackerUi.voltar();
     this.router.navigate(['../list'], { relativeTo: this.route });
   }
 

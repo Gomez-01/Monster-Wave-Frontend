@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 
-import { TrackerService } from '../../../services/tracker.service';
 import { MonsterDrink } from '../../../models/tracker.model';
+import { TrackerComponent } from '../../tracker.component';
 
 @Component({
   selector: 'app-tracker-detail',
@@ -14,7 +14,7 @@ import { MonsterDrink } from '../../../models/tracker.model';
   templateUrl: './tracker-detail.html'
 })
 export class TrackerDetail {
-  readonly tracker = inject(TrackerService);
+  readonly tracker = inject(TrackerComponent);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 

@@ -8,6 +8,7 @@ import { TableModule } from 'primeng/table';
 
 import { MonsterDrink } from '../../../models/tracker.model';
 import { TrackerService } from '../../../services/tracker.service';
+import { TrackerComponent } from '../../tracker.component';
 
 @Component({
   selector: 'app-tracker-list',
@@ -17,6 +18,7 @@ import { TrackerService } from '../../../services/tracker.service';
 })
 export class TrackerList {
   readonly tracker = inject(TrackerService);
+  readonly trackerUi = inject(TrackerComponent);
   private readonly messageService = inject(MessageService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
@@ -24,7 +26,7 @@ export class TrackerList {
   readonly drinks = this.tracker.drinks;      
 
   showDetail(drink: MonsterDrink): void {
-    this.tracker.detalhar(drink);
+    this.trackerUi.detalhar(drink);
     this.router.navigate(['../detail'], {
       relativeTo: this.route,
       state: { drink }
@@ -32,7 +34,7 @@ export class TrackerList {
   }
 
   showEdit(drink: MonsterDrink): void {
-    this.tracker.abrirAlterar(drink);
+    this.trackerUi.abrirAlterar(drink);
     this.router.navigate(['../update'], {
       relativeTo: this.route,
       state: { drink }
@@ -40,14 +42,14 @@ export class TrackerList {
   }
 
   openCreate(): void {
-    this.tracker.abrirIncluir();
+    this.trackerUi.abrirIncluir();
     this.router.navigate(['../new_drink'], {
       relativeTo: this.route
     });
   }
 
   delete(drink: MonsterDrink): void { 
-    this.tracker.remover(drink.id);
+    this.tracker.remove(drink.id);
     this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Bebida excluída com sucesso' });
   }
 }

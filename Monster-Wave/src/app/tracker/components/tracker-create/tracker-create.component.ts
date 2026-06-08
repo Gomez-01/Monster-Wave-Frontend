@@ -6,6 +6,7 @@ import { CardModule } from 'primeng/card';
 
 import { TrackerService } from '../../../services/tracker.service';
 import { TrackerForm } from '../tracker-form/tracker-form.component';
+import { TrackerComponent } from '../../tracker.component';
 
 @Component({
   selector: 'app-tracker-create',
@@ -15,19 +16,20 @@ import { TrackerForm } from '../tracker-form/tracker-form.component';
 })
 export class TrackerCreate {
   readonly tracker = inject(TrackerService);
+  readonly trackerUi = inject(TrackerComponent);
   private readonly messageService = inject(MessageService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  readonly drink = this.tracker.createDrink;
+  readonly drink = this.trackerUi.createDrink;
 
   save(): void {
-    this.tracker.inserir();
+    this.tracker.insert(this.drink());
     this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Bebida adicionada com sucesso' });
     this.router.navigate(['../list'], { relativeTo: this.route });
   }
 
   cancel(): void {
-    this.tracker.voltar();
+    this.trackerUi.voltar();
     this.router.navigate(['../list'], { relativeTo: this.route });
   }
 }
