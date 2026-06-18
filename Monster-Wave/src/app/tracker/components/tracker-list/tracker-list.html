@@ -1,0 +1,39 @@
+<p-card header="Current Catalog" styleClass="overflow-hidden">
+  <div class="mb-4 flex justify-end">
+    <button pButton type="button" label="New drink" severity="success" (click)="openCreate()"></button>
+  </div>
+
+  <p-table [value]="drinks()" [rowHover]="true" responsiveLayout="scroll" styleClass="p-datatable-sm">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Name</th>
+        <th>Flavor</th>
+        <th>Price</th>
+        <th>Release</th>
+        <th>Sugar-free</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-drink>
+      <tr>
+        <td class="font-medium text-slate-400">{{ drink.name }}</td>
+        <td>{{ drink.flavor }}</td>
+        <td>R$ {{ drink.price | number:'1.2-2' }}</td>
+        <td>{{ drink.release }}</td>
+        <td>
+          <span [class]="drink.sugarFree ? 'font-semibold text-emerald-600' : 'text-slate-500'">
+            {{ drink.sugarFree ? 'Yes' : 'No' }}
+          </span>
+        </td>
+        <td>
+          <div class="flex flex-wrap gap-2">
+            <button pButton type="button" label="Detail" severity="info" text="true" (click)="showDetail(drink)"></button>
+            <button pButton type="button" label="Edit" severity="warn" text="true" (click)="showEdit(drink)"></button>
+            <button pButton type="button" label="Delete" severity="danger" text="true" (click)="delete(drink)"></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>

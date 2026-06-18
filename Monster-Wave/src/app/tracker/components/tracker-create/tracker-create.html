@@ -1,0 +1,8 @@
+<p-card header="Add new drink" styleClass="h-full">
+  <app-tracker-form
+    [(drink)]="drink"
+    submitLabel="Create"
+    (submitted)="save()"
+    (cancelled)="cancel()">
+  </app-tracker-form>
+</p-card>
