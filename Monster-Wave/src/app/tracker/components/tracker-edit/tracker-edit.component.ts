@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -15,7 +15,7 @@ import { TrackerComponent } from '../../tracker.component';
   imports: [CommonModule, CardModule, TrackerForm],
   templateUrl: './tracker-edit.html'
 })
-export class TrackerEdit {
+export class TrackerEdit implements OnInit {
   readonly tracker = inject(TrackerService);
   readonly trackerUi = inject(TrackerComponent);
   private readonly messageService = inject(MessageService);
@@ -23,20 +23,43 @@ export class TrackerEdit {
   private readonly route = inject(ActivatedRoute);
   readonly drink = this.trackerUi.editDrink;
 
-  constructor() {
-    const drink = this.readDrinkFromState();
-    if (drink) {
-      this.trackerUi.abrirAlterar(drink);
-    }
+  ngOnInit(): void {
+    const id = this.readDrinkIdFromState();
+    if (id == null) return;
+
+    this.tracker.getById(id).subscribe({
+      next: drink => this.trackerUi.abrirAlterar(drink),
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Não foi possível carregar a bebida para edição'
+        });
+        this.cancel();
+      }
+    });
   }
 
   save(): void {
     const selected = this.trackerUi.selected();
     if (!selected) return;
 
-    this.tracker.update(selected.id, this.drink());
-    this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Bebida editada com sucesso' });
-    this.router.navigate(['../list'], { relativeTo: this.route });
+    this.tracker.update(selected.id, this.drink()).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Bebida editada com sucesso'
+        });
+        this.router.navigate(['../list'], { relativeTo: this.route });
+      },
+      error: () =>
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Não foi possível editar a bebida'
+        })
+    });
   }
 
   cancel(): void {
@@ -44,9 +67,9 @@ export class TrackerEdit {
     this.router.navigate(['../list'], { relativeTo: this.route });
   }
 
-  private readDrinkFromState(): MonsterDrink | null {
+  private readDrinkIdFromState(): number | null {
     const state = this.router.getCurrentNavigation()?.extras.state ?? history.state;
     const drink = state?.['drink'] as MonsterDrink | undefined;
-    return drink ?? null;
+    return drink?.id ?? null;
   }
 }

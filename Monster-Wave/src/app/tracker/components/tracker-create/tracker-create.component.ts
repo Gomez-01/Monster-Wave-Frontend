@@ -23,9 +23,22 @@ export class TrackerCreate {
   readonly drink = this.trackerUi.createDrink;
 
   save(): void {
-    this.tracker.insert(this.drink());
-    this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Bebida adicionada com sucesso' });
-    this.router.navigate(['../list'], { relativeTo: this.route });
+    this.tracker.insert(this.drink()).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Bebida adicionada com sucesso'
+        });
+        this.router.navigate(['../list'], { relativeTo: this.route });
+      },
+      error: () =>
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Não foi possível adicionar a bebida'
+        })
+    });
   }
 
   cancel(): void {

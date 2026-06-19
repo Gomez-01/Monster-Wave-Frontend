@@ -1,31 +1,57 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map, tap } from 'rxjs';
+
 import { MonsterDrink, MonsterFormModel } from '../models/tracker.model';
+
+const API_BASE_URL = 'http://localhost:8000/api/drinks';
 
 @Injectable()
 export class TrackerService {
-  private nextId = 6;
+  private readonly http = inject(HttpClient);
 
-  private readonly registros = signal<MonsterDrink[]>([
-    { id: 1, name: 'Monster Energy Original Green', flavor: 'Classic Citrus', sugarFree: false, price: 10.49, release: 2002 },
-    { id: 2, name: 'Monster Energy Zero Sugar', flavor: 'Classic Citrus', sugarFree: true,  price: 11.49, release: 2023 },
-    { id: 3, name: 'Monster Dragon Ice Tea', flavor: 'Lemon Tea',sugarFree: false, price: 11.49, release: 2019 },
-    { id: 4, name: 'Monster Ultra White',flavor: 'Light Citrus',sugarFree: true, price: 11.49, release: 2012 },
-    { id: 5, name: 'Juice Monster Rio Punch', flavor: 'Papaya Cream',sugarFree: false, price: 11.49, release: 2024 },
-  ]);
+  private readonly registros = signal<MonsterDrink[]>([]);
+  readonly drinks = this.registros.asReadonly();
 
-  readonly drinks     = this.registros.asReadonly();
-
-  insert(newDrinkData: MonsterFormModel): void {
-    const newDrink: MonsterDrink = { id: this.nextId++, ...newDrinkData };
-    this.registros.update(list => [newDrink, ...list]);
+  list(): Observable<MonsterDrink[]> {
+    return this.http.get<MonsterDrink[]>(`${API_BASE_URL}/`).pipe(
+      map(drinks => drinks.map(drink => this.normalizeDrink(drink))),
+      tap(drinks => this.registros.set(drinks))
+    );
   }
 
-  update(id: number, updatedData: MonsterFormModel): void {
-    const updated: MonsterDrink = { id, ...updatedData };
-    this.registros.update(list => list.map(drink => drink.id === id ? updated : drink));
+  getById(id: number): Observable<MonsterDrink> {
+    return this.http.get<MonsterDrink>(`${API_BASE_URL}/${id}/`).pipe(
+      map(drink => this.normalizeDrink(drink))
+    );
   }
 
-  remove(id: number): void {
-    this.registros.update(list => list.filter(drink => drink.id !== id));
+  insert(newDrinkData: MonsterFormModel): Observable<MonsterDrink> {
+    return this.http.post<MonsterDrink>(`${API_BASE_URL}/`, newDrinkData).pipe(
+      map(drink => this.normalizeDrink(drink)),
+      tap(drink => this.registros.update(list => [drink, ...list]))
+    );
+  }
+
+  update(id: number, updatedData: MonsterFormModel): Observable<MonsterDrink> {
+    return this.http.put<MonsterDrink>(`${API_BASE_URL}/${id}/`, updatedData).pipe(
+      map(drink => this.normalizeDrink(drink)),
+      tap(updated =>
+        this.registros.update(list => list.map(drink => (drink.id === id ? updated : drink)))
+      )
+    );
+  }
+
+  remove(id: number): Observable<void> {
+    return this.http.delete<void>(`${API_BASE_URL}/${id}/`).pipe(
+      tap(() => this.registros.update(list => list.filter(drink => drink.id !== id)))
+    );
+  }
+
+  private normalizeDrink(drink: MonsterDrink): MonsterDrink {
+    return {
+      ...drink,
+      price: Number(drink.price)
+    };
   }
 }

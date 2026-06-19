@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -16,14 +16,20 @@ import { TrackerComponent } from '../../tracker.component';
   imports: [CommonModule, CardModule, TableModule, ButtonModule],
   templateUrl: './tracker-list.html'
 })
-export class TrackerList {
+export class TrackerList implements OnInit {
   readonly tracker = inject(TrackerService);
   readonly trackerUi = inject(TrackerComponent);
   private readonly messageService = inject(MessageService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
-  readonly drinks = this.tracker.drinks;      
+  readonly drinks = this.tracker.drinks;
+
+  ngOnInit(): void {
+    this.tracker.list().subscribe({
+      error: () => this.showError('Não foi possível carregar a listagem de bebidas')
+    });
+  }
 
   showDetail(drink: MonsterDrink): void {
     this.trackerUi.detalhar(drink);
@@ -48,8 +54,19 @@ export class TrackerList {
     });
   }
 
-  delete(drink: MonsterDrink): void { 
-    this.tracker.remove(drink.id);
-    this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Bebida excluída com sucesso' });
+  delete(drink: MonsterDrink): void {
+    this.tracker.remove(drink.id).subscribe({
+      next: () =>
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Bebida excluída com sucesso'
+        }),
+      error: () => this.showError('Não foi possível excluir a bebida')
+    });
+  }
+
+  private showError(detail: string): void {
+    this.messageService.add({ severity: 'error', summary: 'Erro', detail });
   }
 }

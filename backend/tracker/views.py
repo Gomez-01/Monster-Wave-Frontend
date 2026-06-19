@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from rest_framework import viewsets
 
-# Create your views here.
+from .models import Drink
+from .serializers import DrinkSerializer
+
+
+class DrinkViewSet(viewsets.ModelViewSet):
+    queryset = Drink.objects.all().order_by("-id")
+    serializer_class = DrinkSerializer
