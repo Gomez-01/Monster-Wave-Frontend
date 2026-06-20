@@ -68,7 +68,7 @@ export class TrackerEdit implements OnInit {
   }
 
   private readDrinkIdFromState(): number | null {
-    const state = this.router.getCurrentNavigation()?.extras.state ?? history.state;
+    const state = this.router.currentNavigation()?.extras.state ?? history.state;
     const drink = state?.['drink'] as MonsterDrink | undefined;
     return drink?.id ?? null;
   }
