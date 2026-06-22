@@ -5,9 +5,9 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { MessageService } from 'primeng/api';
 
-import { MonsterDrink } from '../../../models/tracker.model';
-import { TrackerService } from '../../../services/tracker.service';
-import { TrackerComponent } from '../../tracker.component';
+import { MonsterDrink } from '../../models/tracker.model';
+import { TrackerService } from '../../services/tracker.service';
+import { TrackerComponent } from '../../tracker/tracker.component';
 
 @Component({
   selector: 'app-tracker-detail',

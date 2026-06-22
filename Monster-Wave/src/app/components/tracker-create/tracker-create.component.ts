@@ -4,9 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
 
-import { TrackerService } from '../../../services/tracker.service';
+import { TrackerService } from '../../services/tracker.service';
 import { TrackerForm } from '../tracker-form/tracker-form.component';
-import { TrackerComponent } from '../../tracker.component';
+import { TrackerComponent } from '../../tracker/tracker.component';
 
 @Component({
   selector: 'app-tracker-create',

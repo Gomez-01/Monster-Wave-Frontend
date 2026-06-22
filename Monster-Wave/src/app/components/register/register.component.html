@@ -1,0 +1,70 @@
+<div class="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950 px-4 text-slate-100">
+  <div class="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-emerald-950/30 backdrop-blur">
+
+    <p class="text-sm uppercase tracking-[0.35em] text-emerald-300">Monster Wave</p>
+    <h1 class="mt-2 text-3xl font-black tracking-tight text-white">Criar conta</h1>
+    <p class="mt-1 text-sm text-slate-400">Cadastre-se para acessar o catálogo.</p>
+
+    <form class="mt-8 space-y-5" (ngSubmit)="submit()">
+
+      <div class="space-y-2">
+        <label for="username" class="text-sm font-medium text-slate-300">Usuário</label>
+        <input
+          pInputText
+          id="username"
+          name="username"
+          class="w-full"
+          autocomplete="username"
+          [ngModel]="form().username"
+          (ngModelChange)="updateUsername($event)"
+        />
+      </div>
+
+      <div class="space-y-2">
+        <label for="password" class="text-sm font-medium text-slate-300">Senha</label>
+        <p-password
+          inputId="password"
+          name="password"
+          styleClass="w-full"
+          inputStyleClass="w-full"
+          [toggleMask]="true"
+          autocomplete="new-password"
+          [ngModel]="form().password"
+          (ngModelChange)="updatePassword($event)"
+        />
+      </div>
+
+      <div class="space-y-2">
+        <label for="confirmPassword" class="text-sm font-medium text-slate-300">Confirmar senha</label>
+        <p-password
+          inputId="confirmPassword"
+          name="confirmPassword"
+          styleClass="w-full"
+          inputStyleClass="w-full"
+          [toggleMask]="true"
+          [feedback]="false"
+          autocomplete="new-password"
+          [ngModel]="form().confirmPassword"
+          (ngModelChange)="updateConfirmPassword($event)"
+        />
+      </div>
+
+      @if (errorMessage()) {
+        <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
+      }
+
+      <p-button
+        type="submit"
+        label="Cadastrar"
+        styleClass="w-full"
+        [loading]="loading()"
+      />
+
+      <p class="text-center text-sm text-slate-400">
+        Já tem conta?
+        <a routerLink="/login" class="font-medium text-emerald-300 hover:text-emerald-200">Entrar</a>
+      </p>
+
+    </form>
+  </div>
+</div>
